@@ -7,16 +7,20 @@ auth = BankAuth("accounts")
 @app.route('/balance', methods=['GET'])
 def balance():
     auth_header = request.headers.get('Authorization', '')
-
     if not auth_header.startswith('Bearer '):
         return jsonify({
             "error": "Token faltante o malformado en el header Authorization. Se espera 'Bearer <token>'"
         }), 401
 
     token = auth_header.replace('Bearer ', '')
+    issuer = request.headers.get('X-Token-Issuer')
+    if not issuer:
+        return jsonify({
+            "error": "Falta el header X-Token-Issuer para determinar quién firmó el token"
+        }), 400
 
     try:
-        auth.verify_token(token)
+        auth.verify_token(token, issuer_app_name=issuer)
         # Simulamos una respuesta de balance de cuenta
         return jsonify({
             "status": "success",
