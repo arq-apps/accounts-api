@@ -68,7 +68,7 @@ El token debe estar firmado con una clave autorizada (definida en el Secret Mana
 
 
 
-## 🧪 Ejemplo de request
+## 🧪 Ejemplo de response
 
 ```bash
 {
